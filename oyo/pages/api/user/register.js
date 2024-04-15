@@ -24,8 +24,6 @@ export default async function handler(req, res) {
     const token = jwt.sign({ token: result._id }, "Code_AJ", {
       expiresIn: "30d",
     });
-    return res
-      .status(200)
-      .json({ msg: "Registered Successfully", token, user: result });
+    return res.status(200).json({ msg: "Registered Successfully", token });
   }
 }

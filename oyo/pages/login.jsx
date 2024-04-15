@@ -1,8 +1,47 @@
+"use client";
 import Head from "next/head";
-import React from "react";
+import { useState } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 
 const Login = () => {
-  const login = false;
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [login, setLogin] = useState(false);
+
+  const router = useRouter();
+
+  const handleSignup = async () => {
+    const res = await axios.post(`/api/user/register`, {
+      name,
+      email,
+      password,
+    });
+    if (res?.data) {
+      Cookies.set("user", res.data.token, { expires: 7 });
+      alert(res.data.msg);
+      router.back();
+    }
+  };
+
+  const handleToggle = () => {
+    setLogin(!login);
+  };
+
+  const handleLogin = async () => {
+    const res = await axios.post(`/api/user/login`, {
+      email,
+      password,
+    });
+    if (res?.data) {
+      Cookies.set("user", res.data.token, { expires: 7 });
+      alert(res.data.msg);
+      router.back();
+    }
+  };
+
   return (
     <div>
       <Head>
@@ -42,25 +81,25 @@ const Login = () => {
                   type="text"
                   placeholder="Enter your name..."
                   className=" outline-none border my-3 border-black px-3 py-1 w-96 h-10"
-                  //   onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => setName(e.target.value)}
                 />
               )}
               <input
                 type="email"
                 placeholder="Enter your email..."
                 className=" outline-none border my-3 border-black px-3 py-1 w-96 h-10"
-                // onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <input
                 type="password"
                 placeholder="Enter yourt password..."
                 className=" outline-none border my-3 border-black px-3 py-1 w-96 h-10"
-                // onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <button
                 type="submit"
                 className=" w-96 h-14 text-lg font-bold bg-red-500 hover:cursor-pointer hover:bg-red-600 text-white my-5 rounded-lg"
-                // onClick={login ? handleLogin : handleSignup}
+                onClick={login ? handleLogin : handleSignup}
               >
                 {login ? "Login " : " Sign Up"}
               </button>
@@ -72,7 +111,7 @@ const Login = () => {
                 </span>
                 <span
                   className=" ml-1 border-b-2 border-red-500 text-red-600 pb-1 hover:cursor-pointer"
-                  //   onClick={handleToggle}
+                  onClick={handleToggle}
                 >
                   {" "}
                   {login ? "Sign Up" : "Login"}
