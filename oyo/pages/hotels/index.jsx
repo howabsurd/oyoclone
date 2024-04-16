@@ -24,7 +24,6 @@ export async function getServerSideProps(ctx) {
   );
   console.log(ctx.query.city);
   const data = await res.json();
-  console.log(data);
 
   return {
     props: {
